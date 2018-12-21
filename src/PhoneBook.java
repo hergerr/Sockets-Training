@@ -50,8 +50,12 @@ public class PhoneBook{
 	}
 	
 	public String put(String name, String number) {
-		contacts.put(name, number);
-		return "OK";
+		if(contacts.containsKey(name)) {
+			return "ERROR: Taka osoba istnieje. Numer zostanie nadpisany";
+		} else {
+			contacts.put(name, number);
+			return "OK";
+		}
 	}
 	
 	public String replace(String name, String number) {
@@ -64,12 +68,16 @@ public class PhoneBook{
 	}
 	
 	public String delete(String name) {
-		contacts.remove(name);
-		return "OK";
+		if(!contacts.containsKey(name)) {
+			return "ERROR: Nie ma takiej osoby";
+		} else {
+			contacts.remove(name);
+			return "OK";
+		}
 	}
 	
 	public String list() {
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder("OK: ");
 		for(String key: contacts.keySet()) {
 			sb.append(key + " ");
 		}
