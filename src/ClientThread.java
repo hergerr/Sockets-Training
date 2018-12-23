@@ -53,11 +53,13 @@ class ClientThread implements Runnable {
 
 
                 if (words[0].equals("BYE")) {
+                    outputStream.writeObject("OK");
                     break;
                 }
                 if (message.equals("CLOSE")) {
-                    //docelowo zamkniecie ServerSocket??
-                    break;
+                    //wyjscie z petli while spowoduje zamkniecie ServerSocket
+//                    server.setServerSocketAccepts(false);
+//                    outputStream.writeObject("OK");
                 }
                 if (words[0].equals("LOAD")) {
                     outputStream.writeObject(phoneBook.load(words[1]));
@@ -67,6 +69,9 @@ class ClientThread implements Runnable {
                 }
                 if (words[0].equals("PUT")) {
                     outputStream.writeObject(phoneBook.put(words[1], words[2]));
+                }
+                if (words[0].equals("GET")) {
+                    outputStream.writeObject(phoneBook.get(words[1]));
                 }
                 if (words[0].equals("LIST")) {
                     outputStream.writeObject(phoneBook.list());

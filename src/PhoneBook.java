@@ -59,7 +59,7 @@ public class PhoneBook {
     public String put(String name, String number) {
         if(name.equals("") || name == null || number.equals("") || number == null) return "ERROR: PUSTE POLA";
         if (contacts.containsKey(name)) {
-            return "ERROR: Taka osoba istnieje. Numer zostanie nadpisany";
+            return "ERROR: Taka osoba istnieje. Wprowadz poprawne imie";
         } else {
             contacts.put(name, number);
             return "OK";

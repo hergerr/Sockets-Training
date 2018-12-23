@@ -101,7 +101,7 @@ public class Client extends JFrame implements ActionListener, Runnable{
             while(true){
                 String message = (String)inputStream.readObject();
                 printReceivedMessage(message);
-                if(message.equals("exit")){
+                if(message.equals("BYE")){
                     inputStream.close();
                     outputStream.close();
                     socket.close();

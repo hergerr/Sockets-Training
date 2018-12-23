@@ -3,18 +3,20 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 
 
-class Server extends JFrame implements Runnable {
-
-    private static final long serialVersionUID = 1L;
+class Server implements Runnable {
 
     static final int SERVER_PORT = 25000;
 
     private PhoneBook phoneBook;
+    private boolean serverSocketAccepts = true;
+
+    public void setServerSocketAccepts(boolean serverSocketAccepts) {
+        this.serverSocketAccepts = serverSocketAccepts;
+    }
 
     public Server(){
         phoneBook = new PhoneBook();
@@ -29,15 +31,17 @@ class Server extends JFrame implements Runnable {
             String host = InetAddress.getLocalHost().getHostName();
             System.out.println("Serwer został uruchomiony na hoscie " + host);
             socket_created = true;
-            
 
-            while (true) { 
+
+            while (true) {
                 Socket socket = serwer.accept();
                 if (socket != null) {
                     //ksiazka przekazywazna do konstruktora = do przemyslenia
                     new ClientThread(this, socket, phoneBook);
                 }
             }
+
+
         } catch (IOException e) {
             System.out.println(e);
             if (!socket_created) {
