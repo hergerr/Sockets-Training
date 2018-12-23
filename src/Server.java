@@ -1,21 +1,11 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
+
 
 
 class Server extends JFrame implements Runnable {
@@ -24,13 +14,10 @@ class Server extends JFrame implements Runnable {
 
     static final int SERVER_PORT = 25000;
 
-    public static void main(String [] args){
-        new Server();
-    }
-
-
+    private PhoneBook phoneBook;
 
     public Server(){
+        phoneBook = new PhoneBook();
         new Thread(this).start();
     }
 
@@ -47,7 +34,8 @@ class Server extends JFrame implements Runnable {
             while (true) { 
                 Socket socket = serwer.accept();
                 if (socket != null) {
-                    new ClientThread(this, socket);
+                    //ksiazka przekazywazna do konstruktora = do przemyslenia
+                    new ClientThread(this, socket, phoneBook);
                 }
             }
         } catch (IOException e) {
@@ -66,47 +54,5 @@ class Server extends JFrame implements Runnable {
 } // koniec klasy MyServer
 
 
-
-class ClientThread implements Runnable {
-    private Socket socket;
-    private String name;
-    private Server server;
-
-    private ObjectOutputStream outputStream = null;
-
-    
-    ClientThread(Server server, Socket socket) {
-        this.server = server;
-        this.socket = socket;
-        new Thread(this).start();  // Utworzenie dodatkowego watka
-        // do obslugi komunikacji sieciowej
-    }
-
-    public String getName(){ return name; }
-
-    public String toString(){ return name; }
-
-
-    public void run(){
-        String message;
-        try( ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream input = new ObjectInputStream(socket.getInputStream()); )
-        {
-            outputStream = output;
-            name = (String)input.readObject();
-            while(true){
-                message = (String)input.readObject();
-                if (message.equals("bye")){
-                    break;
-                }
-            }
-            socket.close();
-            socket = null;
-        } catch(Exception e) {
-           e.printStackTrace();
-        }
-    }
-
-} // koniec klasy ClientThread
 
 

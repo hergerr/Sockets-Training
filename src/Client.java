@@ -65,7 +65,7 @@ public class Client extends JFrame implements ActionListener, Runnable{
         JScrollPane scroll_bars = new JScrollPane(textArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         panel.add(scroll_bars);
-        
+
         this.setContentPane(panel);
         this.setVisible(true);
         new Thread(this).start();

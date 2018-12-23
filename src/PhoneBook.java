@@ -10,37 +10,39 @@ import java.util.concurrent.ConcurrentMap;
 public class PhoneBook{
 	//klucz to imie, numer to wartosc
 	private ConcurrentMap<String, String> contacts;
-	
-	public static void main(String[] args) {
-		PhoneBook phoneBook = new PhoneBook();
-		phoneBook.load("mapa");
-		System.out.println(phoneBook.list());
-	}
+
 	
 	public PhoneBook() {
 		contacts = new ConcurrentHashMap<String, String>();
 	}
 
 	@SuppressWarnings("unchecked")
-	public void load(String fileName) {
+	public String load(String fileName) {
 		try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))){
 			contacts =  (ConcurrentMap<String, String>) inputStream.readObject();
+			return "OK";
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return "ERROR" + e.getMessage();
 		} catch (IOException e) {
 			e.printStackTrace();
+			return "ERROR" + e.getMessage();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+			return "ERROR" + e.getMessage();
 		}
 	}
 	
-	public void save(String fileName) {
+	public String save(String fileName) {
 		try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(fileName))) {
 		    outputStream.writeObject(contacts);
+			return "OK";
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
+			return "ERROR" + e.getMessage();
 		} catch (IOException e) {
 			e.printStackTrace();
+			return "ERROR" + e.getMessage();
 		}
 	}
 	
