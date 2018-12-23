@@ -49,31 +49,33 @@ class ClientThread implements Runnable {
 
             while (true) {
                 message = (String) input.readObject();
+                String[] words = message.split("\\s+");
 
-                if (message.equals("BYE")) {
+
+                if (words[0].equals("BYE")) {
                     break;
                 }
                 if (message.equals("CLOSE")) {
                     //docelowo zamkniecie ServerSocket??
                     break;
                 }
-                if (message.equals("LOAD")) {
-                    outputStream.writeObject(phoneBook.load("mapa"));
+                if (words[0].equals("LOAD")) {
+                    outputStream.writeObject(phoneBook.load(words[1]));
                 }
-                if (message.equals("SAVE")) {
-                    outputStream.writeObject(phoneBook.save("mapa"));
+                if (words[0].equals("SAVE")) {
+                    outputStream.writeObject(phoneBook.save(words[1]));
                 }
-                if (message.equals("PUT")) {
-                    outputStream.writeObject(phoneBook.put("Wladimir Putin", "231"));
+                if (words[0].equals("PUT")) {
+                    outputStream.writeObject(phoneBook.put(words[1], words[2]));
                 }
-                if (message.equals("LIST")) {
+                if (words[0].equals("LIST")) {
                     outputStream.writeObject(phoneBook.list());
                 }
-                if (message.equals("REPLACE")) {
-                    outputStream.writeObject(phoneBook.replace("Wladirmir P", "312"));
+                if (words[0].equals("REPLACE")) {
+                    outputStream.writeObject(phoneBook.replace(words[1], words[2]));
                 }
-                if (message.equals("DELETE")) {
-                    outputStream.writeObject(phoneBook.delete("Wladimir Putin"));
+                if (words[0].equals("DELETE")) {
+                    outputStream.writeObject(phoneBook.delete(words[1]));
                 }
 
             }
