@@ -5,7 +5,14 @@ import java.net.Socket;
 
 import javax.swing.JOptionPane;
 
-
+/*
+ *  Książka telefoniczna
+ *   - implementacja serwera
+ *
+ *  Autor: Tymoteusz Frankiewicz
+ *   Data: 24 grudnia 2018 r.
+ *
+ */
 
 class Server implements Runnable {
 
@@ -33,7 +40,7 @@ class Server implements Runnable {
             socket_created = true;
 
 
-            while (true) {
+            while (serverSocketAccepts) {
                 Socket socket = serwer.accept();
                 if (socket != null) {
                     new ClientThread(this, socket, phoneBook);
@@ -54,8 +61,7 @@ class Server implements Runnable {
 
 
 
-} // koniec klasy MyServer
-
+}
 
 
 

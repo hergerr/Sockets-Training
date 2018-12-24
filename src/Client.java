@@ -1,16 +1,3 @@
-/*
- *  Książka telefoniczna
- *   - program klienta
- *
- *  Autor: Tymoteusz Frankiewicz
- *   Data: 1 grudnia 2017 r.
- *
- *   Ze względów praktycznych wyjście z klienta mozliwe jest jedynie przez wpisanie BYE
- *
- *   Naciśnięcie guzika x jedynie minimalizuje okno
- *
- */
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -28,6 +15,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+
+/*
+ *  Książka telefoniczna
+ *   - implementacja klienta
+ *
+ *  Autor: Tymoteusz Frankiewicz
+ *   Data: 24 grudnia 2018 r.
+ *
+ */
 
 
 class Client extends JFrame implements ActionListener, Runnable {

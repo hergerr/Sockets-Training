@@ -7,6 +7,15 @@ import java.io.ObjectOutputStream;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/*
+ *  Książka telefoniczna
+ *   - Model danych książki telefonicznej
+ *
+ *  Autor: Tymoteusz Frankiewicz
+ *   Data: 24 grudnia 2018 r.
+ *
+ */
+
 public class PhoneBook {
     //klucz to imie, numer to wartosc
     private ConcurrentMap<String, String> contacts;
@@ -16,21 +25,17 @@ public class PhoneBook {
         contacts = new ConcurrentHashMap<String, String>();
     }
 
-    @SuppressWarnings("unchecked")
     public String load(String fileName) {
         if (fileName != null || !fileName.equals("")) {
             try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(fileName))) {
                 contacts = (ConcurrentMap<String, String>) inputStream.readObject();
                 return "OK";
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                return "ERROR" + e.getMessage();
+                return "ERROR " + e.getMessage();
             } catch (IOException e) {
-                e.printStackTrace();
-                return "ERROR" + e.getMessage();
+                return "ERROR " + e.getMessage();
             } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                return "ERROR" + e.getMessage();
+                return "ERROR " + e.getMessage();
             }
         } else return "ERROR - pusta nazwa pliku";
 
@@ -42,11 +47,9 @@ public class PhoneBook {
                 outputStream.writeObject(contacts);
                 return "OK";
             } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                return "ERROR" + e.getMessage();
+                return "ERROR " + e.getMessage();
             } catch (IOException e) {
-                e.printStackTrace();
-                return "ERROR" + e.getMessage();
+                return "ERROR " + e.getMessage();
             }
         } else return "ERROR - pusta nazwa pliku";
     }

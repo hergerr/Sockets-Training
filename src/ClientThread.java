@@ -1,8 +1,16 @@
-import javax.swing.*;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
+/*
+ *  Książka telefoniczna
+ *   - Wątek który obsługuje gniazda Socket serwera
+ *
+ *  Autor: Tymoteusz Frankiewicz
+ *   Data: 24 grudnia 2018 r.
+ *
+ */
+
 
 class ClientThread implements Runnable {
     private Socket socket;
@@ -20,71 +28,78 @@ class ClientThread implements Runnable {
         new Thread(this).start();
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String toString() {
         return name;
     }
 
-    public void sendMessage(String message) {
-        try {
-            outputStream.writeObject(message);
-            if (message.equals("bye")) {
-                socket.close();
-                socket = null;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void run(){
+    public void run() {
         String message;
-        try(ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream input = new ObjectInputStream(socket.getInputStream()))
-        {
+        try (ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream input = new ObjectInputStream(socket.getInputStream())) {
             outputStream = output;
-            name = (String)input.readObject();
-            while(true){
-                message = (String)input.readObject();
+            name = (String) input.readObject();
+            while (true) {
+                message = (String) input.readObject();
                 String[] words = message.split("\\s+");
                 if (words[0].equals("BYE")) {
                     outputStream.writeObject("OK");
                     break;
                 }
                 if (message.equals("CLOSE")) {
-                    //wyjscie z petli while spowoduje zamkniecie ServerSocket
                     server.setServerSocketAccepts(false);
                     outputStream.writeObject("OK");
                 }
                 if (words[0].equals("LOAD")) {
-                    outputStream.writeObject(phoneBook.load(words[1]));
+                    try {
+                        outputStream.writeObject(phoneBook.load(words[1]));
+                    } catch (IndexOutOfBoundsException e) {
+                        outputStream.writeObject(phoneBook.load(""));
+                    }
                 }
                 if (words[0].equals("SAVE")) {
-                    outputStream.writeObject(phoneBook.save(words[1]));
+                    try {
+                        outputStream.writeObject(phoneBook.save(words[1]));
+                    } catch (IndexOutOfBoundsException e) {
+                        outputStream.writeObject(phoneBook.save(""));
+                    }
                 }
                 if (words[0].equals("PUT")) {
-                    outputStream.writeObject(phoneBook.put(words[1], words[2]));
+                    try {
+                        outputStream.writeObject(phoneBook.put(words[1], words[2]));
+                    } catch (IndexOutOfBoundsException e) {
+                        outputStream.writeObject(phoneBook.put("", ""));
+                    }
                 }
                 if (words[0].equals("GET")) {
-                    outputStream.writeObject(phoneBook.get(words[1]));
+                    try {
+                        outputStream.writeObject(phoneBook.get(words[1]));
+                    } catch (IndexOutOfBoundsException e) {
+                        outputStream.writeObject(phoneBook.get(""));
+                    }
                 }
                 if (words[0].equals("LIST")) {
                     outputStream.writeObject(phoneBook.list());
                 }
                 if (words[0].equals("REPLACE")) {
-                    outputStream.writeObject(phoneBook.replace(words[1], words[2]));
+                    try {
+                        outputStream.writeObject(phoneBook.replace(words[1], words[2]));
+                    } catch (IndexOutOfBoundsException e) {
+                        outputStream.writeObject(phoneBook.replace("", ""));
+
+                    }
                 }
                 if (words[0].equals("DELETE")) {
-                    outputStream.writeObject(phoneBook.delete(words[1]));
+                    try {
+                        outputStream.writeObject(phoneBook.delete(words[1]));
+                    } catch (IndexOutOfBoundsException e) {
+                        outputStream.writeObject(phoneBook.delete(""));
+                    }
                 }
             }
             socket.close();
             socket = null;
-        } catch(Exception e) {
-//            myServer.removeClient(this);
+        } catch (Exception e) {
+
         }
     }
 }
