@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -39,27 +40,24 @@ class ClientThread implements Runnable {
         }
     }
 
-
-    public void run() {
+    public void run(){
         String message;
-        try (ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream input = new ObjectInputStream(socket.getInputStream());) {
+        try(ObjectOutputStream output = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream input = new ObjectInputStream(socket.getInputStream()))
+        {
             outputStream = output;
-            name = (String) input.readObject();
-
-            while (true) {
-                message = (String) input.readObject();
+            name = (String)input.readObject();
+            while(true){
+                message = (String)input.readObject();
                 String[] words = message.split("\\s+");
-
-
                 if (words[0].equals("BYE")) {
                     outputStream.writeObject("OK");
                     break;
                 }
                 if (message.equals("CLOSE")) {
                     //wyjscie z petli while spowoduje zamkniecie ServerSocket
-//                    server.setServerSocketAccepts(false);
-//                    outputStream.writeObject("OK");
+                    server.setServerSocketAccepts(false);
+                    outputStream.writeObject("OK");
                 }
                 if (words[0].equals("LOAD")) {
                     outputStream.writeObject(phoneBook.load(words[1]));
@@ -82,13 +80,11 @@ class ClientThread implements Runnable {
                 if (words[0].equals("DELETE")) {
                     outputStream.writeObject(phoneBook.delete(words[1]));
                 }
-
             }
             socket.close();
             socket = null;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch(Exception e) {
+//            myServer.removeClient(this);
         }
     }
-
 }

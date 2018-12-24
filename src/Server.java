@@ -36,7 +36,6 @@ class Server implements Runnable {
             while (true) {
                 Socket socket = serwer.accept();
                 if (socket != null) {
-                    //ksiazka przekazywazna do konstruktora = do przemyslenia
                     new ClientThread(this, socket, phoneBook);
                 }
             }
